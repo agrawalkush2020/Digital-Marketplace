@@ -1,4 +1,5 @@
 from django.shortcuts import render,get_object_or_404,reverse,redirect
+from django.contrib.auth.decorators import login_required
 from .models import Product,OrderDetail
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -110,6 +111,7 @@ def product_delete(request,id):
         return redirect('index')
     return render(request, 'myapp/delete.html',{'product':product})
 
+@login_required
 def dashboard(request):
     products = Product.objects.filter(seller=request.user)
     return render(request, 'myapp/dashboard.html',{'products':products})
