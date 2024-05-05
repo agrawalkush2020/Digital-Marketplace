@@ -113,6 +113,9 @@ def product_delete(request,id):
 
 @login_required
 def dashboard(request):
+    # if not request.user.is_authenticated:
+    #     return redirect('index')
+
     products = Product.objects.filter(seller=request.user)
     return render(request, 'myapp/dashboard.html',{'products':products})
 
