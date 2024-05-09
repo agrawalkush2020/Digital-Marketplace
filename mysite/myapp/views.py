@@ -122,16 +122,18 @@ def dashboard(request):
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
-        new_user = user_form.save(commit=False)
-        new_user.set_password(user_form.cleaned_data['password'])
-        new_user.save()
-        return redirect('index')
+        if user_form.is_valid():
+            new_user = user_form.save(commit=False)
+            new_user.set_password(user_form.cleaned_data['password'])
+            new_user.save()
+            return redirect('index')
     user_form = UserRegistrationForm()
     return render(request,'myapp/register.html',{'user_form':user_form})
 
 def invalid(request):
     return render(request, 'myapp/invalid.html')
 
+@login_required
 def my_purchases(request):
     orders = OrderDetail.objects.filter(customer_email=request.user.email)
     return render(request, 'myapp/purchases.html',{'orders':orders})
